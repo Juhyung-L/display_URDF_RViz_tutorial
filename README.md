@@ -43,9 +43,9 @@ https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06
 - Using xacro to define constants that will be reused throughout the file
 
 This is the format to define a link.
-- Start with \<link name='some_name'\> and end with \</link\> (on the same tab spacing)
-- links have the components \<visual\>, \<inertia\>, and \<collision\>
-- /<visual/> has components geometry (for defining shape) and material (for defining color)
+- Start with \<link name="some_name"\> and end with \</link\> (on the same tab spacing)
+- \<link\> has the components \<visual\>, \<inertia\>, and \<collision\>
+- \<visual\> has components \<geometry\> (for defining shape) and \<material\> (for defining color)
 
 https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L41-L50
 - Defining the rectangular body of the robot
