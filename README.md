@@ -1,4 +1,4 @@
-All files in this repository came from https://automaticaddison.com/how-to-create-a-simulated-mobile-robot-in-ros-2-using-urdf/  
+All files in this repository came from https://navigation.ros.org/setup_guides/urdf/setup_urdf.html
 The purpose of this repository is to write down notes while learning ROS2.
 
 Required packages
@@ -8,28 +8,25 @@ Required packages
 
 # Background
 A .urdf file represents a robot model using joints and links.
-- joint: the skeleton of the robot model
-- links: the link that connects the joings
-
-(xml has a html-style format)
+- links: the rigid skeleton of the robot
+- joints: joins the links together
 
 # Creating a ROS2 package
 Make a folder and a folder named source in it.  
 ***mkdir ~/dev_ws/src***  
 ***cd ~/dev_ws/src***  
-***ros2 pkg create --build-type ament_cmake basic_mobile_robot***  
-- this will make a folder named basic_mobile_robot inside the src folder
+***ros2 pkg create --build-type ament_cmake mobile_robot***  
+- this will make a folder named mobile_robot inside the src folder
 - this folder will have
   - CMakeLists.txt
   - package.xml
   - include folder
   - src folder
 
-Then make launch, meshes, models, and rviz folders inside the package.  
+Then make launch, models, and rviz folders inside the package.  
 ***cd ~/dev_ws/src/basic_mobile_robot***  
-***mkdir launch meshes rviz***  
+***mkdir launch models rviz***  
 - launch folder will have the launch script in Python
-- meshes will have the .stl folders, which are like texture files
 - rviz will have the rviz launch file
 - models will have the .urdf file of the robot model
 
@@ -38,31 +35,42 @@ Go to the root directory of the package and build.
 ***colcon build***  
 
 # Make the .urdf file
-Go to the models folder and make a basic_mobile_bot_v1.urdf file  
-***cd ~/dev_ws/src/basic_mobile_robot/models***  
-***gedit basic_mobile_bot_v1.urdf***  
-In this tutorial, the urdf file is copy-pasted in text format, but it is usually made using visual tools such as Solidworks.  
-(the urdf file can be made using a text editor, but only for simple robot models)
+Go to the models folder and make a mobile_bot_model.urdf file  
+***cd ~/dev_ws/src/mobile_robot/models***  
+***gedit mobile_bot_model.urdf***  
 
-Also add the .stl files into the meshes folder.  
-This is done to display custom textures for the robot model and is not necessary.  
-You can use SolidWorks or Blender to generate the .stl or .dae files to add custom texture.  
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L4-L15
+These lines use xacro to define constants that will be reused throughout the file.  
+
+This is the format to define a link.
+- Start with <link name='some_name'> and end with </link> (on the same tab spacing)
+- links have the components visual, inertia, and collision
+- visual has components geometry (for defining shape) and material (for defining color)
+
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L17-L27
+This part defines the rectangular body of the robot.  
+
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L29-L30
+This part defines the virtual link (doesn't exist in real life) that is directly under the center of the robot's body. Since it is a virtual link, it has no components.  
+
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L32-L36
+This part defines the joint that connects the links robot_base and base_link. It defines the joint name and type. The joint type is "fixed" because robot_base and base_link do not move relative to each other (you can use static coordinate transform between them).  
+
+***So basically, a .urdf file is just defining links and connecting them with joints***  
 
 Also add the .rviz file into the rviz folder.  
-I don't know how you generate this file yet.  
+I don't know how you generate this file.  
 
 # Add dependencies
 Add these lines to the package.xml file
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/package.xml#L12-L16
 
 # Make the launch file
 ***cd ~/dev_ws/src/basic_mobile_robot/launch***  
 ***gedit basic_mobile_bot_v1.launch.py***  
 - launch files in Python end with .launch.py
 
-In short, the launch file sets launch configurations.  
-Ex.  
-
-Then adds all the launch configurations to the launch description.
+The launch file is just a Python script to automatically set all the configurations and launch RViz
 
 # Building the package
 Add these lines to the CMakeLists.txt
@@ -77,24 +85,20 @@ After the building, add these lines to the ~/.bashrc file
 
 # Displaying the robot in RViz
 Open a new terminal and type  
-***ros2 launch basic_mobile_robot basic_mobile_bot_v1.launch.py***  
+***ros2 launch mobile_bot display.launch.py***  
 This will bring up the RViz window and the joint_state_publisher_gui. 
-
+![image](https://user-images.githubusercontent.com/102873080/233770287-5e14b63d-02de-48c5-9315-f1f603e485d2.png)
 
 The joint_state_publisher_gui is used to change the angle of the motor.  
 
-
-Checking the "Collision Enabled" checkbox will make a rectangular overlay on the robot's body.  This is like the hitbox of the robot. This box is used to determine the collision instead of the actual robot model to simply the collision simulation in Gazebo.
-
-
 # Viewing the coordinate transform
 ***ros2 run tf2_ros tf2_echo base_link front_caster***  
-Syntax is: ***ros2 run tf2_ros tf2_echo <parent frame> <child frame>***  
-
-
+Syntax is: ***ros2 run tf2_ros tf2_echo parent frame child frame***
+![image](https://user-images.githubusercontent.com/102873080/233770431-a1d8117b-3d7f-49ca-aa4a-136443f1ad8f.png)
 The transform from base_link to front_caster is a static transform because front_caster is fixed in the base_link's coordinate frame. 
 
-
-The "Translation" says that front_caster is located at point [0.217, 0, -0.1] in base_link's frame. The "Rotation", which is represented in a Quaternion (a way of numerically representing orientation), is all [0, 0, 0, 1], which means that base_link and front_caster have the same orientation.
+The "Translation" says that front_caster is located at point [0.14, 0, -0.09] in base_link's frame. The "Rotation", which is represented in a Quaternion (a way of numerically representing orientation), is all [0, 0, 0, 1], which means that base_link and front_caster have the same orientation.
+![image](https://user-images.githubusercontent.com/102873080/233770572-93484ec5-6720-4796-983f-daa346dae7c4.png)
+The transformation makes sense looking at the the RViz model.
 
 
