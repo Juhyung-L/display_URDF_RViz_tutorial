@@ -8,16 +8,16 @@ Required packages
 
 # Background
 A .urdf file represents a robot model using joints and links.
-- links: the rigid skeleton of the robot
-- joints: joins the links together
+- Links: the rigid skeleton of the robot
+- Joints: joins the links together
 
 # Creating a ROS2 package
 Make a folder and a folder named source in it.  
 ***mkdir ~/dev_ws/src***  
 ***cd ~/dev_ws/src***  
 ***ros2 pkg create --build-type ament_cmake mobile_bot***  
-- this will make a folder named mobile_robot inside the src folder
-- this folder will have
+- This will make a folder named mobile_robot inside the src folder
+- This folder will have
   - CMakeLists.txt
   - package.xml
   - include folder
@@ -27,8 +27,8 @@ Then make launch, models, and rviz folders inside the package.
 ***cd ~/dev_ws/src/mobile_bot***  
 ***mkdir launch models rviz***  
 - launch folder will have the launch script in Python
-- rviz will have the rviz launch file
-- models will have the .urdf file of the robot model
+- rviz folder will have the rviz launch file
+- models folder will have the .urdf file of the robot model
 
 Go to the root directory of the package and build.  
 ***cd ~/dev_ws***  
@@ -39,24 +39,40 @@ Go to the models folder and make a mobile_bot_model.urdf file
 ***cd ~/dev_ws/src/mobile_bot/models***  
 ***gedit mobile_bot_model.urdf***  
 
-https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L4-L15
-These lines use xacro to define constants that will be reused throughout the file.  
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L4-L15
+- Using xacro to define constants that will be reused throughout the file
 
 This is the format to define a link.
-- Start with <link name='some_name'> and end with </link> (on the same tab spacing)
-- links have the components visual, inertia, and collision
-- visual has components geometry (for defining shape) and material (for defining color)
+- Start with \<link name='some_name'\> and end with \</link\> (on the same tab spacing)
+- links have the components \<visual\>, \<inertia\>, and \<collision\>
+- /<visual/> has components geometry (for defining shape) and material (for defining color)
 
-https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L17-L27
-This part defines the rectangular body of the robot.  
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L41-L50
+- Defining the rectangular body of the robot
 
-https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L29-L30
-This part defines the virtual link (doesn't exist in real life) that is directly under the center of the robot's body. Since it is a virtual link, it has no components.  
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L59-L60
+- Defining the virtual link (doesn't exist in real life) that is directly under the center of the robot's body  
+- Since it is a virtual link, it has no components
 
-https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/models/mobile_bot_model.urdf#L32-L36
-This part defines the joint that connects the links robot_base and base_link. It defines the joint name and type. The joint type is "fixed" because robot_base and base_link do not move relative to each other (you can use static coordinate transform between them).  
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L62-L66
+- Defining the joint that connects the links robot_base and base_link
+- The joint type is "fixed" because robot_base and base_link do not move relative to each other (you can use static coordinate transform between them)
 
 ***So basically, a .urdf file is just defining links and connecting them with joints***  
+
+The \<visual\> component is all you need to display the robot model on RViz because RViz is just a visualization tool.  
+But if you want the robot to be simulated on Gazebo, you also need the \<inertia\> and \<collision\> components because Gazebo has a physics enigne (like a physics engine for a game) 
+
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L17-L39
+- Defining the inertia of the polygons that make up the robot model using known equations
+- xacro is used like a function where the function name is "box_inertia" and the input parameters are "m w h d" (mass width, height, depth?)
+
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L56
+- xacro is used to define the inertia of the box-shaped body of the robot
+- It essentially copies and pastes the xacro defined above but with the input parameters defined
+
+https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L51-L55
+- defining the collision box (almost like a hitbox) for the robot's body
 
 Also add the .rviz file into the rviz folder.  
 I don't know how you generate this file.  
