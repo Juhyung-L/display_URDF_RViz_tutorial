@@ -60,8 +60,7 @@ https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06
 
 ***So basically, a .urdf file is just defining links and connecting them with joints***  
 
-The \<visual\> component is all you need to display the robot model on RViz because RViz is just a visualization tool.  
-But if you want the robot to be simulated on Gazebo, you also need the \<inertia\> and \<collision\> components because Gazebo has a physics enigne (like a physics engine for a game) 
+The \<visual\> component is all you need to display the robot model on RViz because RViz is just a visualization tool. But if you want the robot to be simulated on Gazebo, you also need the \<inertia\> and \<collision\> components because Gazebo has a physics enigne (like a physics engine for a game) 
 
 https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L17-L39
 - Defining the inertia of the polygons that make up the robot model using known equations
