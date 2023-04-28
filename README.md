@@ -45,7 +45,7 @@ https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06
 
 This is the format to define a link.
 - Start with \<link name="some_name"\> and end with \</link\> (on the same tab spacing)
-- \<link\> has the components \<visual\>, \<inertia\>, and \<collision\>
+- \<link\> has the components \<visual\>, \<in<uri>model://mobile_bot_model_sdf</uri>ertia\>, and \<collision\>
 - \<visual\> has components \<geometry\> (for defining shape) and \<material\> (for defining color)
 
 https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/953928196113ce88a06cc991bceaef9e26573014/models/mobile_bot_model.urdf#L41-L50
@@ -78,7 +78,7 @@ Also add the .rviz file into the rviz folder.
 I don't know how you generate this file.  
 
 # Add dependencies
-Add these lines to the package.xml file
+Add these lines to the package.xml file.
 https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c3dd328c788c80ef7e4a41/package.xml#L12-L16
 
 # Make the launch file
@@ -89,17 +89,17 @@ https://github.com/Juhyung-L/display_urdf_rviz_tutorial/blob/4124760ed5a443e342c
 The launch file is just a Python script to automatically set all the configurations and launch RViz
 
 # Building the package
-Add these lines to the CMakeLists.txt  
+Add these lines to the CMakeLists.txt.  
 ***cd ~/dev_ws***  
 ***colcon build***  
 
-After the building, add these lines to the ~/.bashrc file  
+After the building, add these lines to the ~/.bashrc file.  
 ***source ~/dev_ws/install/setup.bash***  
 - this will source the package everytime the terminal is opened
 - sourcing sets the appropriate environment variables
 
 # Displaying the robot in RViz
-Open a new terminal and type  
+Open a new terminal and type:  
 ***ros2 launch mobile_bot display.launch.py***  
 This will bring up the RViz window and the joint_state_publisher_gui. 
 ![image](https://user-images.githubusercontent.com/102873080/233770287-5e14b63d-02de-48c5-9315-f1f603e485d2.png)  
