@@ -1,8 +1,9 @@
 All files in this repository came from https://navigation.ros.org/setup_guides/urdf/setup_urdf.html  
 The purpose of this repository is to write down notes while learning ROS2.
 
-Required packages
-- Nav2
+Required ROS2 packages
+- robot-state-publisher
+- joint-state-publisher
 - joint-state-publisher-gui
 - xacro
 
